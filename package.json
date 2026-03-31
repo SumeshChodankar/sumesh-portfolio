@@ -1,0 +1,12 @@
+{
+  "name": "sumesh-portfolio",
+  "version": "1.0.0",
+  "description": "Neural galaxy portfolio with visitor tracking",
+  "private": true,
+  "dependencies": {
+    "mongodb": "^6.5.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
