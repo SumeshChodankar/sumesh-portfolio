@@ -1,12 +1,12 @@
 {
-  "name": "sumesh-portfolio",
-  "version": "1.0.0",
-  "description": "Neural galaxy portfolio with visitor tracking",
-  "private": true,
-  "dependencies": {
-    "mongodb": "^6.5.0"
+  "version": 2,
+  "functions": {
+    "api/*.js": {
+      "runtime": "@vercel/node@3.0.0"
+    }
   },
-  "engines": {
-    "node": "24.x"
-  }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
