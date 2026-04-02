@@ -764,6 +764,7 @@ function updateHUD(n) {
 
 // ── Tracking ──────────────────────────────────────────────────────────────
 function trackClick(n, isGitHub=false) {
+  if (!window._trackingConsent) return; // respect decline
   const entry = {
     time: new Date().toISOString(),
     node: n.label,
@@ -887,5 +888,36 @@ animate();
 
 function scrollToCanvas() { document.querySelector('.canvas-side').scrollIntoView({behavior:'smooth'}); }
 </script>
+
+<!-- Consent Banner -->
+<div id="consent-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(6,12,20,0.98);border-top:0.5px solid rgba(0,255,170,0.2);padding:18px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;z-index:9999;font-family:'Space Mono',monospace">
+  <div style="flex:1;min-width:200px">
+    <div style="font-size:10px;font-weight:700;color:#00ffaa;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:5px">// analytics notice</div>
+    <div style="font-size:11px;color:#667788;line-height:1.6">This site logs which projects you explore, your country, and referring page to understand visitor interest. No personal data is sold or shared.</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button onclick="giveConsent(true)" style="font-family:'Space Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:8px 18px;border-radius:2px;border:none;background:#00ffaa;color:#020408;cursor:pointer">Accept</button>
+    <button onclick="giveConsent(false)" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 14px;border-radius:2px;border:0.5px solid rgba(0,255,170,0.2);background:transparent;color:#445566;cursor:pointer">Decline</button>
+  </div>
+</div>
+
+<script>
+  // Consent logic — runs before any tracking
+  function giveConsent(accepted) {
+    localStorage.setItem('analytics_consent', accepted ? 'yes' : 'no');
+    document.getElementById('consent-banner').style.display = 'none';
+    window._trackingConsent = accepted;
+  }
+
+  // Check on load
+  const saved = localStorage.getItem('analytics_consent');
+  if (!saved) {
+    document.getElementById('consent-banner').style.display = 'flex';
+    window._trackingConsent = false; // block tracking until consent
+  } else {
+    window._trackingConsent = saved === 'yes';
+  }
+</script>
+
 </body>
 </html>
